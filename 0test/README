@@ -1,0 +1,1 @@
+g++ -std=c++11 -I$GITHUB/eigen test.cpp -o test.bin
