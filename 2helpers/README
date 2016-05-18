@@ -1,1 +1,1 @@
-g++ -std=c++11 -I$GITHUB/eigen test.cpp helpers.cpp -o test.bin
+g++ -std=c++11 -I$GITHUB/eigen test.cpp type.cpp helpers.cpp -o test.bin

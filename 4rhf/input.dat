@@ -8,10 +8,10 @@ molecule mol {
 
 plugin_load("./test.so")
 
-set basis sto-3g
+set basis         sto-3g
+set maxiter       50
+set e_convergence 12
 
 basisname = psi4.get_global_option("BASIS")
 wfn = psi4.new_wavefunction(mol, basisname)
 psi4.plugin('./test.so', wfn)
-
-

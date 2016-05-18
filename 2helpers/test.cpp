@@ -28,4 +28,6 @@ int main() {
 
   std::cout << e << std::endl;
   std::cout << U << std::endl;
+
+  std::cout << matricks::trace( msqrt % msqrt % minv ) << std::endl;
 }

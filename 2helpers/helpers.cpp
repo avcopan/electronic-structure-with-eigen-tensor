@@ -1,8 +1,7 @@
 #include "helpers.hpp"
-#include <iostream>
 
-Eigen::Tensor<double, 2> operator%(Eigen::Tensor<double, 2> L, Eigen::Tensor<double, 2> R) {
-  matricks::Contraction<1> matmul({matricks::IndexPair(1, 0)});
+Eigen::Tensor<double, 2> operator%(const Eigen::Tensor<double, 2>& L, const Eigen::Tensor<double, 2>& R) {
+  std::array<Eigen::IndexPair<int>, 1> matmul({Eigen::IndexPair<int>(1, 0)});
   return L.contract(R, matmul);
 }
 
@@ -21,6 +20,10 @@ Eigen::Tensor<double, 2> tensor(Eigen::MatrixXd M) {
 Eigen::Tensor<double, 1> tensor(Eigen::VectorXd V) {
   Eigen::TensorMap<Eigen::Tensor<double, 1> > v(V.data(), V.size());
   return v;
+}
+
+double trace(Eigen::Tensor<double, 2> m) {
+  return matrix(m).trace();
 }
 
 Eigen::Tensor<double, 2> transpose(Eigen::Tensor<double, 2> m) {
