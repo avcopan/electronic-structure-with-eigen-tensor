@@ -4,9 +4,6 @@
 #include <libpsio/psio.hpp>
 #include "integrals.hpp"
 
-using EigenTensor  = Eigen::Tensor<double, 4>;
-using EigenMatrix  = Eigen::Matrix<double,-1,-1>;
-
 INIT_PLUGIN
 
 extern "C"
@@ -20,14 +17,18 @@ psi::SharedWavefunction test(psi::SharedWavefunction wfn, psi::Options& options)
 
   /* Your code goes here */
   integrals::Integrals integrals(wfn, options);
-  EigenMatrix S = integrals.ao_overlap();
-  EigenMatrix T = integrals.ao_kinetic();
-  EigenMatrix V = integrals.ao_potential();
-  EigenTensor g = integrals.ao_repulsion();
+  Eigen::Tensor<double, 2> S = integrals.get_ao_overlap();
+  Eigen::Tensor<double, 2> X = integrals.get_ao_orthogonalizer();
+  Eigen::Tensor<double, 2> T = integrals.get_ao_kinetic();
+  Eigen::Tensor<double, 2> V = integrals.get_ao_potential();
+  Eigen::Tensor<double, 4> g = integrals.get_ao_eri_physnotation();
   std::cout << S << std::endl;
   std::cout << T << std::endl;
   std::cout << V << std::endl;
   std::cout << g << std::endl;
+  std::cout << X % X % S << std::endl;
+  int nbf = integrals.get_nbf();
+  std::cout << nbf << std::endl;
 
   return wfn;
 }

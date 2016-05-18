@@ -10,17 +10,24 @@ Integrals::Integrals(Shared<psi::Wavefunction> wfn, psi::Options& options) {
   Shared<psi::BasisSet>        basis = psi::BasisSet::pyconstruct_orbital(mol, "BASIS", basisname);
   Shared<psi::IntegralFactory> integralfactory(new psi::IntegralFactory(basis, basis, basis, basis));
   // 3. compute integrals and store them in Eigen arrays
-  s_ = compute_oei(integralfactory->ao_overlap()  );
-  t_ = compute_oei(integralfactory->ao_kinetic()  );
-  v_ = compute_oei(integralfactory->ao_potential());
-  g_ = compute_tei(integralfactory->eri()         );
+  nbf_ = basis->nbf();
+  s_   = compute_oei(integralfactory->ao_overlap()  );
+  t_   = compute_oei(integralfactory->ao_kinetic()  );
+  v_   = compute_oei(integralfactory->ao_potential());
+  Eigen::Tensor<double, 4> g = compute_tei(integralfactory->eri());
+  std::array<int,4> phys({0,2,1,3});
+  g_ = g.shuffle(phys);
 }
 
-EigenMatrix compute_oei(psi::OneBodyAOInt* O) {
+Eigen::Tensor<double, 2> Integrals::get_ao_orthogonalizer() {
+  return matricks::inverse( matricks::sqrth( s_ ) );
+}
+
+Eigen::Tensor<double, 2> compute_oei(psi::OneBodyAOInt* O) {
   boost::shared_ptr<psi::BasisSet> bs1 = O->basis1(); int dim1 = bs1->nbf();
   boost::shared_ptr<psi::BasisSet> bs2 = O->basis2(); int dim2 = bs2->nbf();
  
-  EigenMatrix A(dim1, dim2);
+  Eigen::Tensor<double, 2> A(dim1, dim2);
   double* pA = A.data();
 
   const double* buffer = O->buffer();
@@ -41,14 +48,14 @@ EigenMatrix compute_oei(psi::OneBodyAOInt* O) {
   return A;
 }
 
-EigenTensor compute_tei(psi::TwoBodyAOInt* T) {
+Eigen::Tensor<double, 4> compute_tei(psi::TwoBodyAOInt* T) {
 
   boost::shared_ptr<psi::BasisSet> bs1 = T->basis1(); int dim1 = bs1->nbf();
   boost::shared_ptr<psi::BasisSet> bs2 = T->basis2(); int dim2 = bs2->nbf();
   boost::shared_ptr<psi::BasisSet> bs3 = T->basis3(); int dim3 = bs3->nbf();
   boost::shared_ptr<psi::BasisSet> bs4 = T->basis4(); int dim4 = bs4->nbf();
 
-  EigenTensor A(dim1, dim2, dim3, dim4);
+  Eigen::Tensor<double, 4> A(dim1, dim2, dim3, dim4);
   double* pA = A.data();
 
   const double* buffer = T->buffer();

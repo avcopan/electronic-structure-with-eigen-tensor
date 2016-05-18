@@ -1,0 +1,12 @@
+#!/bin/bash
+# NOTE: I have environment variable $GITHUB set to a directory
+#       containing the psi4 and eigen source codes
+
+# compile
+g++ -fPIC -std=c++11 -I$GITHUB/eigen -I$GITHUB/psi4/obj/src/lib -I$GITHUB/psi4/src/lib -I$GITHUB/psi4/include -I$GITHUB/psi4/obj/include -I$GITHUB/psi4/obj/boost/include -I$GITHUB/eigen -I/usr/include/python2.7 -I. -c test.cc ../2helpers/helpers.cpp ../3integrals/integrals.cpp rhf.cpp
+
+# link
+g++ -shared -o test.so test.o helpers.o integrals.o rhf.o
+
+# clean up
+rm *.o
