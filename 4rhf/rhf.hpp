@@ -21,16 +21,20 @@ template<int n>   using Tuple       = std::array<int      , n>;
 class RHF {
 private:
   int nbf_;
-  int ndocc_;
+  int naocc_;
   double energy_;
   double vnu_;
   Eigen::Tensor<double, 2> c_;
   Eigen::Tensor<double, 1> e_;
   psi::Options options_;
-  integrals::Integrals integrals_;
+  Shared<integrals::Integrals> integrals_;
 public:
   RHF(Shared<psi::Wavefunction> wfn, psi::Options& options);
   double compute_energy();
+  int get_naocc() { return naocc_; }
+  double get_energy() { return energy_; }
+  Shared<integrals::Integrals> get_integrals() { return integrals_; }
+  Eigen::Tensor<double, 1> get_orbital_energies() { return e_; }
 };
 
 }

@@ -2,7 +2,8 @@
 #include <liboptions/liboptions.h>
 #include <libmints/mints.h>
 #include <libpsio/psio.hpp>
-#include "rhf.hpp"
+#include "../4rhf/rhf.hpp"
+#include "rmp2.hpp"
 
 template<class C> using Shared = boost::shared_ptr<C>;
 
@@ -18,8 +19,10 @@ psi::SharedWavefunction test(psi::SharedWavefunction wfn, psi::Options& options)
 {
 
   /* Your code goes here */
-  Shared<rhf::RHF> rhf(new rhf::RHF(wfn, options));
+  Shared<rhf::RHF>   rhf(new rhf::RHF(wfn, options));
   rhf->compute_energy();
+  Shared<rmp2::RMP2> rmp2(new rmp2::RMP2(rhf, options));
+  rmp2->compute_energy();
 
   return wfn;
 }

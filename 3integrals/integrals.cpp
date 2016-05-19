@@ -19,8 +19,61 @@ Integrals::Integrals(Shared<psi::Wavefunction> wfn, psi::Options& options) {
   g_ = g.shuffle(phys);
 }
 
+int Integrals::get_nbf() {
+  return nbf_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_ao_overlap() {
+  return s_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_ao_kinetic() {
+  return t_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_ao_potential() {
+  return v_;
+}
+
+Eigen::Tensor<double, 4> Integrals::get_ao_eri_physnotation() {
+  return g_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_ao_corehamiltonian() {
+  return t_ + v_;
+}
+
 Eigen::Tensor<double, 2> Integrals::get_ao_orthogonalizer() {
-  return matricks::inverse( matricks::sqrth( s_ ) );
+  return matricks::inverse( matricks::sqrth(s_) );
+}
+
+void Integrals::set_mo_coefficients(Eigen::Tensor<double, 2> c) {
+  c_ = c;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_mo_coefficients() {
+  return c_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_mo_overlap() {
+  return matricks::transpose(c_) % s_ % c_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_mo_kinetic() {
+  return matricks::transpose(c_) % t_ % c_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_mo_potential() {
+  return matricks::transpose(c_) % v_ % c_;
+}
+
+Eigen::Tensor<double, 2> Integrals::get_mo_corehamiltonian() {
+  return matricks::transpose(c_) % (t_ + v_).eval() % c_;
+}
+
+Eigen::Tensor<double, 4> Integrals::get_mo_eri_physnotation() {
+  Contraction<1> ctr({IndexPair(0, 0)});
+  return g_.contract(c_, ctr).contract(c_, ctr).contract(c_, ctr).contract(c_, ctr);
 }
 
 Eigen::Tensor<double, 2> compute_oei(psi::OneBodyAOInt* O) {

@@ -25,10 +25,12 @@ psi::SharedWavefunction test(psi::SharedWavefunction wfn, psi::Options& options)
   std::cout << S << std::endl;
   std::cout << T << std::endl;
   std::cout << V << std::endl;
-  std::cout << g << std::endl;
+  //std::cout << g << std::endl;
   std::cout << X % X % S << std::endl;
   int nbf = integrals.get_nbf();
   std::cout << nbf << std::endl;
+  integrals.set_mo_coefficients(X);
+  std::cout << integrals.get_mo_coefficients() << std::endl;
 
   return wfn;
 }

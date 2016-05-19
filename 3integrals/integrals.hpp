@@ -10,12 +10,15 @@
 namespace integrals {
 
 /* typedefs */
+using IndexPair   = Eigen::IndexPair<int>;
+template<int n>   using Contraction = std::array<IndexPair, n>;
 template<class Class> using Shared = boost::shared_ptr<Class>;
 
 /* classes */
 class Integrals {
 private:
   int nbf_;
+  Eigen::Tensor<double, 2> c_; // MO coefficient matrix
   Eigen::Tensor<double, 2> s_; // overlap integrals
   Eigen::Tensor<double, 2> t_; // electronic kinetic energy operator
   Eigen::Tensor<double, 2> v_; // electron-nuclear repulsion operator
@@ -24,13 +27,20 @@ private:
 public:
   /* constructor */
   Integrals(Shared<psi::Wavefunction> wfn, psi::Options& options);
-  int get_nbf() { return nbf_; }
+  int get_nbf();
+  Eigen::Tensor<double, 2> get_ao_overlap();
+  Eigen::Tensor<double, 2> get_ao_kinetic();
+  Eigen::Tensor<double, 2> get_ao_potential();
+  Eigen::Tensor<double, 2> get_ao_corehamiltonian();
   Eigen::Tensor<double, 2> get_ao_orthogonalizer();
-  Eigen::Tensor<double, 4> get_ao_eri_physnotation() { return g_;      }
-  Eigen::Tensor<double, 2> get_ao_overlap()          { return s_;      }
-  Eigen::Tensor<double, 2> get_ao_kinetic()          { return t_;      }
-  Eigen::Tensor<double, 2> get_ao_potential()        { return v_;      }
-  Eigen::Tensor<double, 2> get_ao_corehamiltonian()  { return t_ + v_; }
+  Eigen::Tensor<double, 4> get_ao_eri_physnotation();
+  void set_mo_coefficients(Eigen::Tensor<double, 2>);
+  Eigen::Tensor<double, 2> get_mo_coefficients();
+  Eigen::Tensor<double, 2> get_mo_overlap(); // for testing purposes
+  Eigen::Tensor<double, 2> get_mo_kinetic();
+  Eigen::Tensor<double, 2> get_mo_potential();
+  Eigen::Tensor<double, 2> get_mo_corehamiltonian();
+  Eigen::Tensor<double, 4> get_mo_eri_physnotation();
 };
 
 /* functions */
