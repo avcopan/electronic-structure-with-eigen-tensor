@@ -29,8 +29,9 @@ psi::SharedWavefunction test(psi::SharedWavefunction wfn, psi::Options& options)
   std::cout << X % X % S << std::endl;
   int nbf = integrals.get_nbf();
   std::cout << nbf << std::endl;
-  integrals.set_mo_coefficients(X);
-  std::cout << integrals.get_mo_coefficients() << std::endl;
+  std::cout << integrals.get_mo_a_coefficients() << std::endl;
+  std::cout << integrals.get_mo_aa_overlap() << std::endl;
+  std::cout << integrals.get_mo_bb_overlap() << std::endl;
 
   return wfn;
 }

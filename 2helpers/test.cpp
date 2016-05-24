@@ -1,4 +1,3 @@
-#include <Eigen/Dense>                       // Eigen::Matrix
 #include <unsupported/Eigen/CXX11/Tensor>    // Eigen::Tensor
 #include <iostream>                          // std::cout
 #include <tuple>                             // std::tie

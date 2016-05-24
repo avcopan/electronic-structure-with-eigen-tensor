@@ -8,7 +8,7 @@ RMP2::RMP2(Shared<rhf::RHF> rhf, psi::Options& options) : rhf_(rhf), options_(op
   naocc_    = rhf_->get_naocc();
   navir_    = nbf_ - naocc_;
   e_        = rhf_->get_orbital_energies();
-  g_        = rhf_->get_integrals()->get_mo_eri_physnotation();
+  g_        = rhf_->get_integrals()->get_mo_aaaa_eri_physnotation();
 }
 
 double RMP2::compute_energy() {

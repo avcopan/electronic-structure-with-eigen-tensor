@@ -1,5 +1,5 @@
 molecule mol {
-  0 1
+  1 2
   O
   H 1 0.9
   H 1 0.9 2 104.5
@@ -11,12 +11,11 @@ plugin_load("./test.so")
 set basis         sto-3g
 set maxiter       50
 set e_convergence 12
-set reference     rhf
+set reference     uhf
 set scf_type      pk
-set mp2_type      conv
 
 basisname = psi4.get_global_option("BASIS")
 wfn = psi4.new_wavefunction(mol, basisname)
 psi4.plugin('./test.so', wfn)
 
-energy('mp2')
+energy('scf')

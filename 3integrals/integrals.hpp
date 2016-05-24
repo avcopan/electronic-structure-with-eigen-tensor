@@ -3,7 +3,6 @@
 
 #include <boost/shared_ptr.hpp>           // boost::shared_ptr
 #include <libmints/mints.h>               // psi::OneBodyAOInt, psi::TwoBodyAOInt
-#include <Eigen/Dense>                    // Eigen::Matrix
 #include <unsupported/Eigen/CXX11/Tensor> // Eigen::Tensor
 #include "../2helpers/helpers.hpp"
 
@@ -18,11 +17,12 @@ template<class Class> using Shared = boost::shared_ptr<Class>;
 class Integrals {
 private:
   int nbf_;
-  Eigen::Tensor<double, 2> c_; // MO coefficient matrix
-  Eigen::Tensor<double, 2> s_; // overlap integrals
-  Eigen::Tensor<double, 2> t_; // electronic kinetic energy operator
-  Eigen::Tensor<double, 2> v_; // electron-nuclear repulsion operator
-  Eigen::Tensor<double, 4> g_; // two-electron integrals in physicist's notation, <mu nu | rh si>
+  Eigen::Tensor<double, 2> ac_; // alpha MO coefficient matrix
+  Eigen::Tensor<double, 2> bc_; // beta  MO coefficient matrix
+  Eigen::Tensor<double, 2> s_;  // overlap integrals
+  Eigen::Tensor<double, 2> t_;  // electronic kinetic energy operator
+  Eigen::Tensor<double, 2> v_;  // electron-nuclear repulsion operator
+  Eigen::Tensor<double, 4> g_;  // two-electron integrals in physicist's notation, <mu nu | rh si>
   
 public:
   /* constructor */
@@ -34,13 +34,21 @@ public:
   Eigen::Tensor<double, 2> get_ao_corehamiltonian();
   Eigen::Tensor<double, 2> get_ao_orthogonalizer();
   Eigen::Tensor<double, 4> get_ao_eri_physnotation();
-  void set_mo_coefficients(Eigen::Tensor<double, 2>);
-  Eigen::Tensor<double, 2> get_mo_coefficients();
-  Eigen::Tensor<double, 2> get_mo_overlap(); // for testing purposes
-  Eigen::Tensor<double, 2> get_mo_kinetic();
-  Eigen::Tensor<double, 2> get_mo_potential();
-  Eigen::Tensor<double, 2> get_mo_corehamiltonian();
-  Eigen::Tensor<double, 4> get_mo_eri_physnotation();
+  void set_mo_a_coefficients(Eigen::Tensor<double, 2>);
+  void set_mo_b_coefficients(Eigen::Tensor<double, 2>);
+  Eigen::Tensor<double, 2> get_mo_a_coefficients();
+  Eigen::Tensor<double, 2> get_mo_b_coefficients();
+  Eigen::Tensor<double, 2> get_mo_aa_overlap(); // for testing purposes
+  Eigen::Tensor<double, 2> get_mo_bb_overlap(); // for testing purposes
+  Eigen::Tensor<double, 2> get_mo_aa_kinetic();
+  Eigen::Tensor<double, 2> get_mo_bb_kinetic();
+  Eigen::Tensor<double, 2> get_mo_aa_potential();
+  Eigen::Tensor<double, 2> get_mo_bb_potential();
+  Eigen::Tensor<double, 2> get_mo_aa_corehamiltonian();
+  Eigen::Tensor<double, 2> get_mo_bb_corehamiltonian();
+  Eigen::Tensor<double, 4> get_mo_aaaa_eri_physnotation();
+  Eigen::Tensor<double, 4> get_mo_abab_eri_physnotation();
+  Eigen::Tensor<double, 4> get_mo_bbbb_eri_physnotation();
 };
 
 /* functions */
