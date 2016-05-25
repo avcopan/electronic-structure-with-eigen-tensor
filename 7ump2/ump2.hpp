@@ -1,36 +1,40 @@
-#ifndef RMP2_HPP_
-#define RMP2_HPP_
+#ifndef UMP2_HPP_
+#define UMP2_HPP_
 
-#include <iostream>  // std::cout
-#include <cstdio>    // std::printf
+#include <iostream> // std::cout
+#include <cstdio>   // std::printf
 #include <liboptions/liboptions.h>        // psi::Options
 #include <unsupported/Eigen/CXX11/Tensor> // Eigen::Tensor
-#include "../4rhf/rhf.hpp"
+#include "../6uhf/uhf.hpp"
 
-namespace rmp2 {
+namespace ump2 {
 
-/* typedefs */
 using IndexPair = Eigen::IndexPair<int>;
 template<class C> using Shared      = boost::shared_ptr<C>;
 template<int n>   using Contraction = std::array<IndexPair, n>;
 template<int n>   using Tuple       = std::array<int      , n>;
 
-class RMP2 {
+class UMP2 {
 private:
   int nbf_;
   int naocc_;
+  int nbocc_;
   int navir_;
+  int nbvir_;
   double hfenergy_;
   double cenergy_;
   psi::Options options_;
-  Shared<rhf::RHF> rhf_;
-  Eigen::Tensor<double, 1> e_;
-  Eigen::Tensor<double, 4> g_;
+  Shared<uhf::UHF> uhf_;
+  Eigen::Tensor<double, 1> ae_;
+  Eigen::Tensor<double, 1> be_;
+  Eigen::Tensor<double, 4> aag_;
+  Eigen::Tensor<double, 4> abg_;
+  Eigen::Tensor<double, 4> bbg_;
 public:
-  RMP2(Shared<rhf::RHF>, psi::Options&);
+  UMP2(Shared<uhf::UHF>, psi::Options&);
   double compute_energy();
 };
 
-} // rmp2
+} // ump2
 
-#endif // RMP2_HPP_
+#endif // UMP2_HPP_
